@@ -2,13 +2,13 @@ steps:
   # Step 1: Clone the Git repository
   - name: 'gcr.io/cloud-builders/git'
     args: ['clone', '-b', 'main', 'https://github.com/akaspatranobis/hotstar-clone-app-gcpdevops.git']
-    dir: '/workspace/repo'
+    
 
   # Step 2: Check Terraform version
   - name: 'gcr.io/${PROJECT_ID}/terraform'
     entrypoint: 'sh'
     args: ['-c', 'terraform --version']
-    dir: '/workspace/repo'
+    
 
   # Step 3: Terraform Initialize
   - name: 'gcr.io/${PROJECT_ID}/terraform'
@@ -18,7 +18,7 @@ steps:
       - "TF_VAR_project=${PROJECT_ID}"
       - "TF_VAR_region=${_REGION}"
       - "TF_VAR_zone=${_ZONE}"
-    dir: '/workspace/repo/GKE_TERRAFORM'
+    dir: '/workspace/hotstar-clone-app-gcpdevops/GKE_TERRAFORM'
 
 
   # Step 5: Terraform Plan
@@ -28,7 +28,7 @@ steps:
       - "TF_VAR_project=${PROJECT_ID}"
       - "TF_VAR_region=${_REGION}"
       - "TF_VAR_zone=${_ZONE}"
-    dir: '/workspace/repo/GKE_TERRAFORM'
+    dir: '/workspace/hotstar-clone-app-gcpdevops/GKE_TERRAFORM'
 
   # Step 6: Terraform Apply/Destroy
   - name: 'gcr.io/${PROJECT_ID}/terraform'
@@ -37,7 +37,7 @@ steps:
       - "TF_VAR_project=${PROJECT_ID}"
       - "TF_VAR_region=${_REGION}"
       - "TF_VAR_zone=${_ZONE}"
-    dir: '/workspace/repo/GKE_TERRAFORM'
+    dir: '/workspace/hotstar-clone-app-gcpdevops/GKE_TERRAFORM'
 
 substitutions:
   _ACTION: 'apply' # Use 'apply' or 'destroy' as needed
