@@ -5,31 +5,31 @@ steps:
     dir: '/workspace/repo'
 
   # Step 2: Check Terraform version
-  - name: 'hashicorp/terraform'
+  - name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: 'sh'
     args: ['-c', 'terraform --version']
     dir: '/workspace/repo'
 
   # Step 3: Terraform Initialize
-  - name: 'hashicorp/terraform'
+  - name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: 'sh'
     args: ['-c', 'terraform init']
     dir: '/workspace/repo/GKE_TERRAFORM'
 
   # Step 4: Terraform Validate
-  - name: 'hashicorp/terraform'
+  - name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: 'sh'
     args: ['-c', 'terraform validate']
     dir: '/workspace/repo/GKE_TERRAFORM'
 
   # Step 5: Terraform Plan
-  - name: 'hashicorp/terraform'
+  - name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: 'sh'
     args: ['-c', 'terraform plan']
     dir: '/workspace/repo/GKE_TERRAFORM'
 
   # Step 6: Terraform Apply/Destroy
-  - name: 'hashicorp/terraform'
+  - name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: 'sh'
     args: ['-c', 'terraform ${Action} --auto-approve']
     dir: '/workspace/repo/GKE_TERRAFORM'
