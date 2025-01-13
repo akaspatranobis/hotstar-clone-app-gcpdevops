@@ -1,1 +1,3 @@
-# hotstar-clone-app-gcpdevops-k8-
+# DevSecOps Hotstar Clone Project
+
+

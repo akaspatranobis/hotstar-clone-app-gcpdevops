@@ -1,0 +1,38 @@
+steps:
+  # Step 1: Clone the Git repository
+  - name: 'gcr.io/cloud-builders/git'
+    args: ['clone', '-b', 'main', 'https://github.com/akaspatranobis/hotstar-clone-app-gcpdevops.git']
+    dir: '/workspace/repo'
+
+  # Step 2: Check Terraform version
+  - name: 'hashicorp/terraform'
+    entrypoint: 'sh'
+    args: ['-c', 'terraform --version']
+    dir: '/workspace/repo'
+
+  # Step 3: Terraform Initialize
+  - name: 'hashicorp/terraform'
+    entrypoint: 'sh'
+    args: ['-c', 'terraform init']
+    dir: '/workspace/repo/GKE_TERRAFORM'
+
+  # Step 4: Terraform Validate
+  - name: 'hashicorp/terraform'
+    entrypoint: 'sh'
+    args: ['-c', 'terraform validate']
+    dir: '/workspace/repo/GKE_TERRAFORM'
+
+  # Step 5: Terraform Plan
+  - name: 'hashicorp/terraform'
+    entrypoint: 'sh'
+    args: ['-c', 'terraform plan']
+    dir: '/workspace/repo/GKE_TERRAFORM'
+
+  # Step 6: Terraform Apply/Destroy
+  - name: 'hashicorp/terraform'
+    entrypoint: 'sh'
+    args: ['-c', 'terraform ${Action} --auto-approve']
+    dir: '/workspace/repo/GKE_TERRAFORM'
+
+substitutions:
+  _ACTION: 'apply' # Use 'apply' or 'destroy' as needed
