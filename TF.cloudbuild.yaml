@@ -12,8 +12,7 @@ steps:
 
   # Step 3: Terraform Initialize
   - name: 'gcr.io/${PROJECT_ID}/terraform'
-    args: ['init',
-      '-backend-config=bucket=${_BUCKET}', '-reconfigure']
+    args: ['init']
     env:
       - "TF_VAR_project=${PROJECT_ID}"
       - "TF_VAR_region=${_REGION}"

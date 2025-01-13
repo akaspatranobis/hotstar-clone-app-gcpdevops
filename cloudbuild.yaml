@@ -1,0 +1,82 @@
+steps:
+  
+  # Step 2: Checkout from Git
+  - name: 'gcr.io/cloud-builders/git'
+    args: ['clone', '-b', 'main', 'https://github.com/akaspatranobis/hotstar-clone-app-ci-cd-k8.git']
+    dir: '/workspace/hotstar-clone-app-ci-cd-k8'
+
+  # Step 3: SonarQube Analysis
+  - name: 'gcr.io/$PROJECT_ID/sonar-scanner:latest'
+    entrypoint: 'sh'
+    args:
+      - '-c'
+      - |
+        sonar-scanner \
+          -Dsonar.projectName=Hotstar \
+          -Dsonar.projectKey=Hotstar
+    env:
+      - 'SONAR_HOST_URL=https://sonar-server'
+      - 'SONAR_LOGIN=$(cat /workspace/secrets/sonar-token)'
+
+  # Step 4: Quality Gate Check (SonarQube quality gate simulation)
+  - name: 'gcr.io/cloud-builders/curl'
+    entrypoint: 'curl'
+    args:
+      - '-d'
+      - |
+        echo "Waiting for SonarQube Quality Gate Result..."
+        sleep 10  # Small delay for the analysis to complete
+        SONAR_API="https://sonarcloud.io/api/qualitygates/project_status?projectKey={specify}"
+        STATUS=$(curl -s -u {sonar-token}: $SONAR_API | jq -r '.projectStatus.status')
+        echo "Quality Gate Status: $STATUS"
+        if [ "$STATUS" != "OK" ]; then
+          echo "Quality Gate failed with status: $STATUS"
+          exit 1
+        fi
+
+  # Step 5: Install Node.js Dependencies
+  - name: 'gcr.io/cloud-builders/npm'
+    entrypoint: 'sh'
+    args: ['-c', 'npm install']
+    dir: '/workspace/hotstar-clone-app-ci-cd-k8'
+
+
+  # Step 7: Docker Build & Push
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'apatranobis59/hotstar:latest', '.']
+    dir: '/workspace/hotstar-clone-app-ci-cd-k8'
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'apatranobis59/hotstar:latest']
+
+  # Step 8: Trivy Image Scan
+  - name: 'gcr.io/$PROJECT_ID/trivy'
+    args: ['--format', 'json', '--output', 'scan_image_report.json', 'apatranobis59/hotstar:latest']
+
+  # Step 9: Deploy to Kubernetes
+  - name: 'gcr.io/cloud-builders/kubectl'
+    args: ['apply', '-f', 'deployment.yml']
+    
+    dir: '/workspace/hotstar-clone-app-ci-cd-k8/K8S'
+    env:
+      - "CLOUDSDK_COMPUTE_REGION=<your cluster's region>"
+      - "CLOUDSDK_CONTAINER_CLUSTER=<your cluster's name>"
+
+  - name: 'gcr.io/cloud-builders/kubectl'
+    args: ['apply', '-f', 'service.yml']
+    dir: '/workspace/hotstar-clone-app-ci-cd-k8/K8S'
+    env:
+      - "CLOUDSDK_COMPUTE_REGION=<your cluster's region>"
+      - "CLOUDSDK_CONTAINER_CLUSTER=<your cluster's name>"    
+      
+substitutions:
+  _SONAR_TOKEN: '<sonar-token-placeholder>'
+  _DOCKER_CREDENTIALS: '<docker-credentials-placeholder>'
+
+timeout: '1800s'  # Set timeout to 30 minutes
+
+options:
+  logging: CLOUD_LOGGING_ONLY 
+
+tags: ['cloud-builders-community']     
+
