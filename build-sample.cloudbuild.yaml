@@ -36,3 +36,6 @@ steps:
 
 substitutions:
   _ACTION: 'apply' # Use 'apply' or 'destroy' as needed
+
+options:
+  logging: CLOUD_LOGGING_ONLY    
