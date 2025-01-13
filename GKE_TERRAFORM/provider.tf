@@ -7,6 +7,10 @@ terraform {
     kubernetes = {
       source = "hashicorp/kubernetes"
     }
+    backend "gcs" {
+    bucket = "terraform-state-xsx"
+    prefix = "terraform/state"
+  }
   }
   required_version = ">= 0.13"
 }
