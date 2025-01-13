@@ -9,7 +9,7 @@ provider "kubernetes" {
 
 module "gcp-network" {
   source  = "terraform-google-modules/network/google"
-  #version = ">= 7.5"
+  version = ">= 7.5"
 
   project_id   = var.project_id
   network_name = var.network
@@ -38,7 +38,7 @@ module "gcp-network" {
 
 module "gke" {
   source  = "terraform-google-modules/kubernetes-engine/google"
-  #version = "~> 34.0"
+  version = "~> 34.0"
 
   project_id             = var.project_id
   name                   = var.cluster_name
