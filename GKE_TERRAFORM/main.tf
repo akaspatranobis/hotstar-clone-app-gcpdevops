@@ -56,10 +56,10 @@ module "gke" {
       name            = "pool-01"
       machine_type      = "e2-medium"
       node_locations              = "us-central1-a"
-      min_count       = 1
-      max_count       = 2
+      min_count       = 2
+      max_count       = 3
       # service_account = var.compute_engine_service_account
-      disk_size_gb      = 30
+      disk_size_gb      = 20
       disk_type         = "pd-standard"
       image_type                  = "COS_CONTAINERD"
       auto_upgrade    = true
