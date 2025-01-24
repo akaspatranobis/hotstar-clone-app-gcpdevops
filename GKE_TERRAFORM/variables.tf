@@ -1,7 +1,7 @@
 
 variable "project_id" {
   description = "The project ID to host the cluster in"
-  default = "gcp-devops-439413"
+  default = "spatial-edition-448110-b9"
 }
 
 variable "cluster_name" {
