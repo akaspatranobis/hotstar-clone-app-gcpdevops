@@ -17,7 +17,7 @@ terraform {
 }
 
 provider "google" {
-  project     = "gcp-devops-439413"
+  project     = "spatial-edition-448110-b9"
   region      = "us-central1"
   zone        = "us-central1-c"
 }
