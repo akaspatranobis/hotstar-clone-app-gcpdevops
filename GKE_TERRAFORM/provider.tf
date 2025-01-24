@@ -10,7 +10,7 @@ terraform {
     
   }
   backend "gcs" {
-    bucket = "terraform-state-xsx"
+    bucket = "cloud-build-bucket-xxx"
     prefix = "terraform/state"
   }
   
