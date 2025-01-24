@@ -40,7 +40,7 @@ steps:
 
 substitutions:
   _ACTION: 'apply' # Use 'apply' or 'destroy' as needed
-  _BUCKET: 'terraform-state-xsx'
+  _BUCKET: 'cloud-build-bucket-xxx'
 
 options:
   logging: CLOUD_LOGGING_ONLY 
